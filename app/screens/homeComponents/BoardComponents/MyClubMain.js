@@ -52,6 +52,7 @@ export default class MyClubMain extends Component {
     
     render() {
     const user_id = this.props.user_id
+    const member = this.props.member
       const { modalVisible } = this.state;
         return(
         <View style={styles.container}>
@@ -118,10 +119,24 @@ export default class MyClubMain extends Component {
             </View>
            <View> 
             <View style = {{flexDirection : 'row', justifyContent : 'space-evenly'}}>
-              <TouchableOpacity style = {styles.button}>
+              <TouchableOpacity style = {styles.button} onPress={()=>{
+                if(member == 'admin' || member == true){
+                this.props.navigation.navigate("NoticeBoardScreen",{user_id:user_id ,member:member})
+              }
+              else{
+                alert('동아리 가입을 해야합니다.')
+              }
+              }}>
                 <Text style = {styles.buttonText}>공지사항</Text>
               </TouchableOpacity>
-              <TouchableOpacity style = {styles.button} onPress={()=>{this.props.navigation.navigate("BoardScreen",{user_id:user_id})}}>
+              <TouchableOpacity style = {styles.button} onPress={()=>{
+                if(member == 'admin' || member == true){
+                this.props.navigation.navigate("BoardScreen",{user_id:user_id ,member:member})
+              }
+              else{
+                alert('동아리 가입을 해야합니다.')
+              }
+              }}>
                 <Text style = {styles.buttonText}>자유게시판</Text>
               </TouchableOpacity>
             </View>

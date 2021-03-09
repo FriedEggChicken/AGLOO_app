@@ -1,4 +1,4 @@
-import React,{Component,useState} from "react";
+import React,{Component} from "react";
 import {View,Image,Text,TextInput,Keyboard,StyleSheet,Button,TouchableOpacity,FlatList} from "react-native";
 import axios from "axios";
 import Constants from 'expo-constants'
@@ -84,7 +84,7 @@ export default class Write extends Component {
             </View>
         )
         return(
-            <View style={{flex: 1, backgroundColor:"#aaced7"}}>
+            <View style={{flex: 1, backgroundColor:"#ebf4f6"}}>
             <ScrollView>
                 <View style={styles.setting}>
                     <Text 

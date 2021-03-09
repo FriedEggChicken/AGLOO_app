@@ -37,10 +37,13 @@ export default class HomeMain extends Component {
     this.state = {
       my_token : '',
       userID : '',
-      data : []
+      data : [],
+      member: '',
     };
     
 }
+
+
 
 
  async componentDidMount() {
@@ -89,7 +92,15 @@ export default class HomeMain extends Component {
       .finally(() => {
         //this.setState({ isLoading : false });
       });
-    
+
+      fetch('http://115.85.183.157:3000/isMember/1/'+this.state.userID,{method: 'GET' })
+      .then((response) => response.json())
+      .then((response) => {
+        this.setState({member:response.member})
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   render(){
@@ -123,7 +134,7 @@ export default class HomeMain extends Component {
                 horizontal={true} 
                 showsHorizontalScrollIndicator={false}
                 renderItem={({item})=>
-                <TouchableOpacity onPress={()=>this.props.navigation.navigate("MyClub",{id : item.club_id, img:item.img, user_id:this.state.userID})}>
+                <TouchableOpacity onPress={()=>this.props.navigation.navigate("MyClub",{id : item.club_id, img:item.img, user_id:this.state.userID, member: this.state.member})}>
                  <Category imageUri = {{uri : `http://115.85.183.157:3000${item.img}`}}
                 name = {item.club_name}
                 /> 
