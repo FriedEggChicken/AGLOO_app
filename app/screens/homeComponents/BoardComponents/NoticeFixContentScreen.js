@@ -188,7 +188,8 @@ const styles = StyleSheet.create({
       },
       buttonText: {
         fontSize : 20,
-        color:'white'
+        color:'white',
+        textAlign:'center'
       },
       image: {
         width:150,
