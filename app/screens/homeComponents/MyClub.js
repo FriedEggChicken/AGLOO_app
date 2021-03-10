@@ -9,6 +9,9 @@ import NoticeBoardScreen from './BoardComponents/NoticeBoardScreen'
 import NoticeContentScreen from './BoardComponents/NoticeContentScreen'
 import NoticeFixContentScreen from './BoardComponents/NoticeFixContentScreen'
 import MakeNoticeScreen from './BoardComponents/MakeNoticeScreen'
+import ClubTableScreen from './BoardComponents/ClubTableScreen';
+import MembersTableScreen from './BoardComponents/MembersTableScreen';
+
 
 const ClubStack = createStackNavigator();
 
@@ -31,7 +34,12 @@ export default function MyClub({route}) {
         <ClubStack.Screen name = "NoticeContentScreen" component={NoticeContentScreen}/>
         <ClubStack.Screen name ="fixcontentscreen" component={FixContentScreen}/>
         <ClubStack.Screen name ="NoticeFixContentScreen" component={NoticeFixContentScreen}/>
-        
+        <ClubStack.Screen name ="clubtablescreen">
+          {(props)=> <ClubTableScreen {...props} club_id = {club_id}/>}
+        </ClubStack.Screen>
+        <ClubStack.Screen name ="Memberstablescreen">
+          {(props)=> <MembersTableScreen {...props} club_id = {club_id}/>}
+        </ClubStack.Screen>
       </ClubStack.Navigator>
   );
 }

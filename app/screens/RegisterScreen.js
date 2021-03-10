@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { NavigationContainer } from '@react-navigation/native'
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { ThemeColors } from 'react-navigation';
 
 
 export default class register extends Component {
@@ -9,9 +10,11 @@ export default class register extends Component {
 		super(props)
 		this.state={
 			userId:'',
-            userName:'',
+      userName:'',
 			userPassword:'',
-            userPasswordConfirm:''
+      userPasswordConfirm:'',
+      st_Id:'',
+      major:''
 		}
 	}
 
@@ -40,7 +43,9 @@ export default class register extends Component {
         body: JSON.stringify({
             id : this.state.userId,
             name : this.state.userName,
-            pw : this.state.userPassword
+            pw : this.state.userPassword,
+            st_id : this.state.st_Id,
+            major : this.state.major
         }),
     })
     .then((response) => response.json())
@@ -73,6 +78,8 @@ export default class register extends Component {
           <TextInput style = {styles.input} placeholder = "이름" onChangeText={userName => this.setState({userName})} />
           <TextInput secureTextEntry={false} style = {styles.input} placeholder = "비밀번호" onChangeText={userPassword => this.setState({userPassword})} />
           <TextInput secureTextEntry={false} style = {styles.input} placeholder = "비밀번호 확인" onChangeText={userPasswordConfirm => this.setState({userPasswordConfirm})} /> 
+          <TextInput style = {styles.input} placeholder = "학번" onChangeText={st_Id => this.setState({st_Id})} /> 
+          <TextInput style = {styles.input} placeholder = "학과" onChangeText={major => this.setState({major})} />  
             </View>
           <View style = {styles.buttonArea}>
           <TouchableOpacity
@@ -93,7 +100,7 @@ export default class register extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#76B0BE',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -101,32 +108,37 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: "center"
   },
-  input:{
-    borderWidth: 1,
-    borderColor: "#24A6D9",
+  input: {
+    borderWidth: 2,
+    borderColor: "#3A445D",
+    backgroundColor: "white",
+    opacity: 0.9,
     borderRadius: 6,
-    width: '70%',
+    width: "70%",
     height: 50,
     marginTop: 8,
     paddingHorizontal: 20,
-    fontSize: 18
-  },
+    fontSize: 18,
+},
   buttonArea:{
     width : '100%',
     alignItems :"center"
   },
-  button:{
+  button: {
+    opacity: 0.9,
     borderWidth: 2,
-    backgroundColor: "#004ba0",
+    borderColor: "#3A445D",
+    backgroundColor: "#3A445D",
     borderRadius: 6,
     justifyContent: "center",
     alignItems: "center",
-    width: '70%',
+    width: "70%",
     height: 50,
-    marginTop: 8
-  },
-  buttonText: {
-    fontSize : 20,
-    color : "white"
-  }
+    marginTop: 8,
+},
+buttonText: {
+    fontWeight: "700",
+    fontSize: 17,
+    color: "white",
+},
 });
