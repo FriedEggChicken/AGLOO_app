@@ -9,8 +9,13 @@ import NoticeBoardScreen from './BoardComponents/NoticeBoardScreen'
 import NoticeContentScreen from './BoardComponents/NoticeContentScreen'
 import NoticeFixContentScreen from './BoardComponents/NoticeFixContentScreen'
 import MakeNoticeScreen from './BoardComponents/MakeNoticeScreen'
+import PictureBoardScreen from './BoardComponents/PictureBoardScreen'
+import ContentPictureScreen from './BoardComponents/ContentPictureScreen'
+import MakingPictureBoardScreen from './BoardComponents/MakingPictureBoardScreen'
+import FixPictureBoardScreen from './BoardComponents/FixPictureBoardScreen'
 import ClubTableScreen from './BoardComponents/ClubTableScreen';
 import MembersTableScreen from './BoardComponents/MembersTableScreen';
+
 
 
 const ClubStack = createStackNavigator();
@@ -28,14 +33,18 @@ export default function MyClub({route}) {
         </ClubStack.Screen>
         <ClubStack.Screen name = "BoardScreen" component={BoardScreen}/>
         <ClubStack.Screen name = "NoticeBoardScreen" component={NoticeBoardScreen}/>
+        <ClubStack.Screen name = "PictureBoardScreen" component={PictureBoardScreen}/>
         <ClubStack.Screen name = "makingboard" component={MakingBoardScreen}/>
         <ClubStack.Screen name = "MakeNoticeScreen" component={MakeNoticeScreen}/>
+        <ClubStack.Screen name = "MakingPictureBoardScreen" component={MakingPictureBoardScreen}/>
         <ClubStack.Screen name = "contentscreen" component={ContentScreen}/>
         <ClubStack.Screen name = "NoticeContentScreen" component={NoticeContentScreen}/>
+        <ClubStack.Screen name = "ContentPictureScreen" component={ContentPictureScreen}/>
         <ClubStack.Screen name ="fixcontentscreen" component={FixContentScreen}/>
         <ClubStack.Screen name ="NoticeFixContentScreen" component={NoticeFixContentScreen}/>
+        <ClubStack.Screen name ="FixPictureBoardScreen" component={FixPictureBoardScreen}/>
         <ClubStack.Screen name ="clubtablescreen">
-          {(props)=> <ClubTableScreen {...props} club_id = {club_id}/>}
+          {(props)=> <ClubTableScreen {...props} club_id = {club_id} />}
         </ClubStack.Screen>
         <ClubStack.Screen name ="Memberstablescreen">
           {(props)=> <MembersTableScreen {...props} club_id = {club_id}/>}

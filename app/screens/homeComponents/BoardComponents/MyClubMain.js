@@ -369,7 +369,8 @@ export default class MyClubMain extends Component {
             <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>사진갤러리</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() =>
+               {this.props.navigation.navigate("PictureBoardScreen",{user_id:user_id ,member:member})}}>
               <Text style={styles.buttonText}>활동게시판</Text>
             </TouchableOpacity>
           </View>

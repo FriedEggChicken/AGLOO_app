@@ -1,30 +1,36 @@
 import React,{Component} from "react";
-import {View,Image,Text,TextInput,Keyboard,StyleSheet,Button,TouchableOpacity,FlatList} from "react-native";
+import {View,Text,Image,TextInput,Keyboard,FlatList,StyleSheet,Button,TouchableOpacity} from "react-native";
 import axios from "axios";
 import Constants from 'expo-constants'
 import * as ImagePicker from 'expo-image-picker'
-import * as Permissions from 'expo-permissions'
-import * as MediaLibrary from 'expo-media-library'
-import {Camera} from 'expo-camera'
 import { ScrollView } from "react-native-gesture-handler";
 
-
 export default class Write extends Component {
-    constructor(props){
-		super(props)
-
-        // const [loading,setLoading] = useState(false);
-        // const [hasAllow, setHasAllow] = useState(false);
-		this.state={
-		title: '',
-        content: '',
-        img: [],
-        image: [], //2,3개 이미지 들어갈 때 어떻게 할 것인지
-        setSelected: []
-		}
-	}
-    
-    openImage = async() => {
+    constructor(props) {
+        super(props);
+        this.state = {
+          dataSource: '',
+          title: '',
+          content: '',
+          setSelected: '',
+          img: []
+        }
+      }
+      componentDidMount () {
+        const {idx} = this.props.route.params
+        return fetch('http://115.85.183.157:3000/post/act_board/'+idx,{method: 'GET'})
+        .then((response) => response.json())
+        .then((response) => {
+          this.setState({
+            dataSource: response, //list 형태
+            setSelected: response.img
+          })
+        })
+        .catch((error) => {
+          console.log(error)
+        });
+      }
+      openImage = async() => {
         let permission = await ImagePicker.requestCameraPermissionsAsync();
 
         if(permission.granted === false){
@@ -40,18 +46,17 @@ export default class Write extends Component {
         console.log(result)
 
         if (!result.cancelled) {
-            this.setState({ img: result });
+            this.setState({ img: result ,setSelected: ''});
         }
     }
-    
-    postBoard = () => {
-        const{title,content} = this.state;
-        const {user_id} = this.props.route.params
-        const data = new FormData();
-        if(title == ''){
+
+    updateBoard = () => {
+      const {idx} = this.props.route.params
+      const data = new FormData();
+        if(this.state.title == ''){
             this.setState({alarm:'제목을 입력하세요'})
         }
-        else if(content == ""){
+        else if(this.state.content == ""){
             this.setState({alarm:'내용을 입력하세요'})
         }
         else{
@@ -65,11 +70,10 @@ export default class Write extends Component {
                     name: filename,
                     type,
                 });}
-                data.append("id",user_id)
-                data.append("title",title)
-                data.append("content",content)
-        fetch('http://115.85.183.157:3000/post/1/free_board',{
-            method: 'POST',
+                data.append("title",this.state.title)
+                data.append("content",this.state.content)
+        fetch('http://115.85.183.157:3000/post/act_board/'+idx,{
+            method: 'PATCH',
             body:data,
             headers: {
                 "content-type": "multipart/form-data",
@@ -78,7 +82,7 @@ export default class Write extends Component {
         .then((response) => response.json())
         .then((response)=>{
             if(response.success){
-                this.props.navigation.navigate("BoardScreen");
+                this.props.navigation.navigate("PictureBoardScreen");
             }else{
                 alert(response.msg);
             }
@@ -91,39 +95,35 @@ export default class Write extends Component {
     };
 
     render() {
+
         return(
-            <View style={{flex: 1, backgroundColor:"#ebf4f6"}}>
+          <View style={{flex: 1, backgroundColor:"#ebf4f6"}}>
             <ScrollView>
                 <View style={styles.setting}>
-                    <Text 
-                    style={styles.topp}>
-                        게시글 작성</Text>
+                    <Text style={styles.topp}>게시글 수정</Text>
                 <View>
                     <Text style={{color:'red',alignSelf: 'center'}}>{this.state.alarm}</Text>
                 </View>
-                <View style={styles.writingform}>
                 {
-                        this.state.img.length !== 0 ?
-                        (<Image source = {{uri:this.state.img.uri}} style = {styles.image}></Image>
+                        this.state.setSelected !== '' ?
+                        (<Image source = {{uri:'http://115.85.183.157:3000'+this.state.setSelected}} style = {styles.image}></Image>
         
-                        ) : <Text>사진을 추가하세요!!</Text>
+                        ) : <Image source = {{uri:this.state.img.uri}} style = {styles.image}></Image>
                     }
-                    <TextInput style={styles.input} 
-                    placeholder = "제목" 
+                <View style={styles.writingform}>
+                    <TextInput style={styles.input} defaultValue={this.state.dataSource.title}
                     onChangeText={title => this.setState({title})}/>
-                    <TextInput style={styles.contentinput} 
-                    placeholder = {"\n * 부적절한 용어 사용시 이용 제한 ! *" }
+                    <TextInput style={styles.contentinput} defaultValue={this.state.dataSource.content}
                     multiline = {true} 
                     blurOnSubmit={true}
-                    onChangeText={content => this.setState({content})}
-                    />
+                    onChangeText={content => this.setState({content})}/>
                 </View>
                 <View style={styles.buttonarea}>
                     <TouchableOpacity
                     style = {styles.button}
-                    onPress = {this.postBoard}
+                    onPress = {this.updateBoard}
                     >
-                        <Text style = {styles.buttonText}>🖍  작성</Text>
+                        <Text style = {styles.buttonText}>🖍  수정</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                     style = {styles.button}
@@ -145,15 +145,15 @@ const styles = StyleSheet.create({
       paddingTop: Constants.statusBarHeight
     },
     topp: {
-        fontSize: 25, 
-        borderWidth:2,
-        borderColor:'#76b0be', 
-        backgroundColor:'#76b0be', 
-        width:"100%",
-        textAlign: 'center',
-        color: 'white',
-        fontWeight: "bold",
-    },
+      fontSize: 25, 
+      borderWidth:2,
+      borderColor:'#76b0be', 
+      backgroundColor:'#76b0be', 
+      width:"100%",
+      textAlign: 'center',
+      color: 'white',
+      fontWeight: "bold",
+  },
     writingform: {
         width: '100%',
         alignItems: "center"
@@ -197,11 +197,12 @@ const styles = StyleSheet.create({
       },
       buttonText: {
         fontSize : 20,
-        color: 'white'
+        color:'white',
+        textAlign:'center'
       },
       image: {
-          width:150,
-          height: 150,
-          resizeMode: 'contain'
-      }
+        width:150,
+        height: 150,
+        resizeMode: 'contain'
+    }
   });

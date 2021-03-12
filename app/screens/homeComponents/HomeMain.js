@@ -41,7 +41,6 @@ export default class HomeMain extends Component {
       member: '',
       feed: [],
       feed_: [],
-      a:''
     };
     
 }
@@ -105,7 +104,7 @@ export default class HomeMain extends Component {
         console.log(error)
       })
 
-      fetch('http://115.85.183.157:3000/feed/test1/notice_board',{method: 'GET' })
+      fetch('http://115.85.183.157:3000/feed/james/notice_board',{method: 'GET' })
       .then((response) => response.json())
       .then((response) => {
         this.setState({feed:response})
@@ -114,7 +113,7 @@ export default class HomeMain extends Component {
         console.log(error)
       })
 
-      fetch('http://115.85.183.157:3000/feed/test1/free_board',{method: 'GET' })
+      fetch('http://115.85.183.157:3000/feed/james/free_board',{method: 'GET' })
       .then((response) => response.json())
       .then((response) => {
         this.setState({feed_:response})
@@ -164,98 +163,147 @@ export default class HomeMain extends Component {
             }
     }
   }
-  render(){
-    const {data} = this.state;
-    
+  render() {
+    const { data } = this.state;
     let feeds = this.state.feed.map((val,key) => {
       return <View key={key} style={{flex:1,paddingHorizontal: 20,backgroundColor:'#ebf4f6'}}>
         <TouchableOpacity onPress = {()=>this.props.navigation.navigate("homeboardscreen",{idx:val.idx,user_id:this.state.userID, member: this.state.member})}>
 
         <View style={{flexDirection:'row'}}>
-      <Text style={{fontWeight:'bold',fontSize:18}}>제목: {val.title}</Text>
+      <Text style={{fontWeight:'bold',fontSize:16}}>{val.title}</Text>
       </View>
-      <Text style={{fontWeight:'bold',fontSize:13}}>작성자: {val.writer}</Text>
+      <Text style={{fontWeight:'bold',fontSize:13, color : 'grey'}}>작성자: {val.writer} from {val.club_name}</Text>
       <View style={{flexDirection:'row',width:'100%',borderBottomWidth : 1,
       borderBottomColor : "#a7b4c9"}}>
-      <Text>조회수: {val.hit}</Text>
-      {val.updated === val.created ? (<Text> 생성: {val.created}</Text>) : 
-      (<Text> 수정: {val.updated}</Text>)}
-      <Text>  ⏰ {this.timeBefore(val.created)}</Text>
+      <Text style = {{color : "grey"}}>조회수: {val.hit}</Text>
+      {val.updated === val.created ? (<Text style = {{color : "grey"}}> 생성: {val.created}</Text>) : 
+      (<Text style = {{color : "grey"}}> 수정: {val.updated}</Text>)}
+      <Text style = {{color : "grey",position : 'absolute', marginLeft : 300 }}>{this.timeBefore(val.created)}</Text>
         </View>
         </TouchableOpacity>
       </View>
     })
 
     let feedss = this.state.feed_.map((val,key) => {
-      return <View key={key} style={{flex:1,paddingHorizontal: 20,backgroundColor:'#ebf4f6'}}>
-        <TouchableOpacity onPress = {()=>this.props.navigation.navigate("homeboardsscreen",{idx:val.idx,user_id:this.state.userID, member: this.state.member})}>
+      return<View key={key} style={{flex:1,paddingHorizontal: 20,backgroundColor:'#ebf4f6'}}>
+      <TouchableOpacity onPress = {()=>this.props.navigation.navigate("homeboardsscreen",{idx:val.idx,user_id:this.state.userID, member: this.state.member})}>
 
-        <View style={{flexDirection:'row'}}>
-      <Text style={{fontWeight:'bold',fontSize:18}}>제목: {val.title}</Text>
+      <View style={{flexDirection:'row'}}>
+    <Text style={{fontWeight:'bold',fontSize:16}}>{val.title}</Text>
+    </View>
+    <Text style={{fontWeight:'bold',fontSize:13, color : 'grey'}}>작성자: {val.writer} from {val.club_name}</Text>
+    <View style={{flexDirection:'row',width:'100%',borderBottomWidth : 1,
+    borderBottomColor : "#a7b4c9"}}>
+    <Text style = {{color : "grey"}}>조회수: {val.hit}</Text>
+    {val.updated === val.created ? (<Text style = {{color : "grey"}}> 생성: {val.created}</Text>) : 
+    (<Text style = {{color : "grey"}}> 수정: {val.updated}</Text>)}
+    <Text style = {{color : "grey",position : 'absolute', marginLeft : 300 }}>{this.timeBefore(val.created)}</Text>
       </View>
-      <Text style={{fontWeight:'bold',fontSize:13}}>작성자: {val.writer}</Text>
-      <View style={{flexDirection:'row',width:'100%',borderBottomWidth : 1,
-      borderBottomColor : "#a7b4c9"}}>
-      <Text>조회수: {val.hit}</Text>
-      {val.updated === val.created ? (<Text>   생성: {val.created}</Text>) : 
-      (<Text>   수정: {val.updated}</Text>)}
-       <Text>  ⏰ {this.timeBefore(val.created)}</Text>
-        </View>
-        </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
+    </View>
     })
+
     return (
-      <SafeAreaView style = {{ flex : 1, backgroundColor : '#aaced7'}}>
-        <View style={{ flex: 1, backgroundColor:"#aaced7"}}>
-          <View style = {{ height : this.starHeaderHeight, backgroundColor : '#aaced7',
-          borderBottomWidth : 1, borderBottomColor : '#dddddd'}}>
-            <View style = {{flexDirection: 'row', padding:10,backgroundColor: 'white', marginHorizontal:20, 
-                            shadowOffset : { width : 0, height : 0}, shadowColor: '#000', shadowOpacity: 0.2,elevation : 1, marginTop: Platform.OS == 'android' ? 30 : null}}>
-              <Icon name = "ios-search" size = {20} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#aaced7" }}>
+        <View style={{ flex: 1, backgroundColor: "#aaced7" }}>
+          <View
+            style={{
+              height: this.starHeaderHeight,
+              backgroundColor: "#aaced7",
+              borderBottomWidth: 1,
+              borderBottomColor: "#dddddd",
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                padding: 10,
+                backgroundColor: "white",
+                marginHorizontal: 20,
+                shadowOffset: { width: 0, height: 0 },
+                shadowColor: "#000",
+                shadowOpacity: 0.2,
+                elevation: 1,
+                marginTop: Platform.OS == "android" ? 30 : null,
+              }}
+            >
+              <Icon name="ios-search" size={20} />
               <TextInput
-              underlineColorAndroid = "transparent"
-                placeholder = " 동아리를 검색하세요"
+                underlineColorAndroid="transparent"
+                placeholder=" 동아리를 검색하세요"
                 placeholderTextColor="grey"
-                style = {{ flex : 1, fontWeight: '700',
-                backgroundColor : 'white',borderRadius : 5}}/>
+                style={{
+                  flex: 1,
+                  fontWeight: "700",
+                  backgroundColor: "white",
+                  borderRadius: 5,
+                }}
+              />
             </View>
           </View>
-          <ScrollView scrollEventThrottle = {16}>
-            <View style = {{flex:1, backgroundColor:'#7dacb7e', paddingTop : 20}}>
-              <Text style = {{fontSize:24, fontWeight: '700', paddingHorizontal: 20}}>
+          <ScrollView scrollEventThrottle={16}>
+            <View
+              style={{ flex: 1, backgroundColor: "#7dacb7e", paddingTop: 20 }}
+            >
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: "700",
+                  paddingHorizontal: 20,
+                  color : '#fff'
+                }}
+              >
                 {`${this.state.userID}님의 동아리`}
               </Text>
 
-              <View style = {{height : 280, marginTop: 20, shadowColor: "#000",shadowOffset: { width: 0,height: 2},shadowOpacity: 0.7, shadowRadius: 4}}>                       
-              <FlatList 
-                data={data} 
-                keyExtractor={item => item.club_id.toString()} 
-                horizontal={true} 
-                showsHorizontalScrollIndicator={false}
-                renderItem={({item})=>
-                <TouchableOpacity onPress={()=>this.props.navigation.navigate("MyClub",{id : item.club_id, img:item.img, user_id:this.state.userID, member: this.state.member})}>
-                 <Category imageUri = {{uri : `http://115.85.183.157:3000${item.img}`}}
-                name = {item.club_name}
-                /> 
-                </TouchableOpacity>
-                }
-                keyboardShouldPersistTaps = "always"
+              <View
+                style={{
+                  height: 280,
+                  marginTop: 20,
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.7,
+                  shadowRadius: 4,
+                }}
+              >
+                <FlatList
+                  data={data}
+                  keyExtractor={(item) => item.club_id.toString()}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate("MyClub", {
+                          id : item.club_id, 
+                          img:item.img, 
+                          user_id:this.state.userID, 
+                          member: this.state.member
+                        })
+                      }
+                    >
+                      <Category
+                        imageUri={{
+                          uri: `http://115.85.183.157:3000${item.img}`,
+                        }}
+                        name={item.club_name}
+                      />
+                    </TouchableOpacity>
+                  )}
+                  keyboardShouldPersistTaps="always"
                 />
-
               </View>
-              </View>
-              <View style={{borderTopWidth : 1, borderTopColor : "#dddddd"}}>
+            </View>
+            <View style={{borderTopWidth : 1, borderTopColor : "#dddddd"}}>
                 <View style={{marginTop: 20}}>
-                  <Text style={{fontSize:24,fontWeight: '700',paddingHorizontal: 20,marginBottom: 20}}>최신 게시물</Text>
-                  <Text style={{fontSize:22,fontWeight: '700',textAlign: 'center',backgroundColor:'#ebf4f6'}}>공 지 사 항</Text>
+                  <Text style={{fontSize:22,color:"white", fontWeight: '700',paddingHorizontal: 20,marginBottom: 20}}>최신 게시물</Text>
+                  <Text style={{fontSize:20,paddingTop : 10, fontWeight: '700',paddingLeft : 18,backgroundColor:'#ebf4f6',paddingBottom : 10}}>공지사항</Text>
                   {feeds}
-                  <Text style={{marginTop:20,fontSize:22,fontWeight: '700',textAlign: 'center',backgroundColor:'#ebf4f6'}}>자 유 게 시 판</Text>
+                  <Text style={{marginTop:20,fontSize:20,paddingTop : 10,paddingLeft : 18,fontWeight: '700',backgroundColor:'#ebf4f6',paddingBottom : 10}}>자유게시판</Text>
                   {feedss}
                 </View>
               </View>
-
           </ScrollView>
-
         </View>
       </SafeAreaView>
     );

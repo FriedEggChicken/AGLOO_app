@@ -67,7 +67,7 @@ export default class login extends Component {
     render() {
         return (
             //https://i.imgur.com/Fhkzs6Q.png
-            <KeyboardAvoidingView style={styles.container} behavior="padding">
+            <KeyboardAvoidingView style={styles.container}>
                 <ImageBackground
                     source={{ uri: "https://i.imgur.com/zX4uhuc.jpg" }}
                     style={styles.background}

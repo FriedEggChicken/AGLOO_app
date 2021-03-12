@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View,RefreshControl,ImageBackground,Alert,Text,Button,SafeAreaView,StyleSheet,ScrollView,TouchableOpacity,FlatList,ActivityIndicator} from "react-native";
+import {View,RefreshControl,Image,Alert,Text,Button,SafeAreaView,StyleSheet,ScrollView,TouchableOpacity,FlatList,ActivityIndicator} from "react-native";
 import axios from 'axios';
 import Constants from 'expo-constants'
 import StickyHeaderFooterScrollView from 'react-native-sticky-header-footer-scroll-view';
@@ -137,11 +137,18 @@ export default class BoardScreen extends Component {
       const {member} = this.props.route.params
       const renderlist = ({item}) => (
       <View style = {styles.item}> 
-        <TouchableOpacity style = {{width:'90%'}} onPress = {()=>this.props.navigation.navigate("contentscreen",{idx:item.idx,user_id:user_id,member:member})}>
+        <TouchableOpacity style = {{}} onPress = {()=>this.props.navigation.navigate("contentscreen",{idx:item.idx,user_id:user_id,member:member})}>
+ 
           <Text style={styles.writes}>{item.title}</Text>
+          <View style={{justifyContent:'center',alignItems:'center'}}>
+          </View>
           <View style={{flexDirection:'row'}}>
           <Text style={{}}>작성자: {item.writer}</Text>
-          <Text>   {item.created}   ⏰ {this.timeBefore(item.created)}</Text> 
+          <Text>   {item.created}   ⏰ {this.timeBefore(item.created)}</Text>
+          <View style={{flexDirection:'row'}}>
+        {(((item.img != null) && (item.img != ''))) && 
+          <Image source = {{uri:'http://115.85.183.157:3000'+item.img}} style = {styles.image}></Image>}
+          </View>
           </View>                     
           </TouchableOpacity>
         {(user_id == item.id || member == 'admin') &&  <View style={{flex:1,alignItems:"flex-end" ,justifyContent:"flex-end"}}>
@@ -215,7 +222,9 @@ const styles = StyleSheet.create({
     item: {
       flexDirection: "row",
       borderBottomWidth : 1,
-      borderBottomColor : "#a7b4c9"
+      borderBottomColor : "#a7b4c9",
+      justifyContent: 'center',
+      alignItems:'center'
     },
     settingg: {
       position:'absolute',
@@ -254,4 +263,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "100%"
       },
+      image: {
+        marginLeft:20,
+        width:20,
+        height: 20,
+        resizeMode: 'contain'
+    }
   });

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View,ImageBackground,Image,Alert,Text,Modal,Pressable,StyleSheet,ScrollView,TouchableOpacity,SafeAreaView,FlatList,ActivityIndicator} from "react-native";
+import {View,Image,ImageBackground,Alert,Text,Modal,Pressable,StyleSheet,ScrollView,TouchableOpacity,SafeAreaView,FlatList,ActivityIndicator} from "react-native";
 import axios from 'axios';
 import Constants from 'expo-constants'
 import StickyHeaderFooterScrollView from 'react-native-sticky-header-footer-scroll-view';
@@ -19,7 +19,7 @@ export default class ContentScreen extends Component {
 
       componentDidMount () {
         const {idx} = this.props.route.params || ''
-        return (fetch('http://115.85.183.157:3000/post/free_board/'+idx,{method: 'GET'})
+        return (fetch('http://115.85.183.157:3000/post/act_board/'+idx,{method: 'GET'})
         .then((response) => response.json())
         .then((response) => {
           this.setState({
@@ -29,7 +29,7 @@ export default class ContentScreen extends Component {
         .catch((error) => {
           console.log(error)
         }),
-        fetch('http://115.85.183.157:3000/cmnt/free_comment/'+idx,{method: 'GET'})
+        fetch('http://115.85.183.157:3000/cmnt/act_comment/'+idx,{method: 'GET'})
         .then((response)=>response.json())
         .then((response) => {
           this.setState({
@@ -50,7 +50,7 @@ export default class ContentScreen extends Component {
           alert('댓글을 입력하세요')
         }
         else{
-          fetch('http://115.85.183.157:3000/cmnt/free_comment/'+idx,{
+          fetch('http://115.85.183.157:3000/cmnt/act_comment/'+idx,{
             method:'POST',
             headers:{
               'Accept' : 'application/json',
@@ -64,7 +64,7 @@ export default class ContentScreen extends Component {
         .then((response) => response.json())
         .then((response)=>{
             if(response.success){
-              fetch('http://115.85.183.157:3000/cmnt/free_comment/'+idx,{method: 'GET'})
+              fetch('http://115.85.183.157:3000/cmnt/act_comment/'+idx,{method: 'GET'})
                     .then((response) => response.json())
                     .then((response) => {
                       this.setState({
@@ -90,7 +90,7 @@ export default class ContentScreen extends Component {
             alert('댓글을 입력하세요')
           }
           else{
-          fetch('http://115.85.183.157:3000/cmnt/free_comment/'+dx,{
+          fetch('http://115.85.183.157:3000/cmnt/act_comment/'+dx,{
               method: 'PATCH',
               headers:{
                   'Accept' : 'application/json',
@@ -103,7 +103,7 @@ export default class ContentScreen extends Component {
           .then((response) => response.json())
           .then((response)=>{
               if(response.success){
-                fetch('http://115.85.183.157:3000/cmnt/free_comment/'+idx,{method: 'GET'})
+                fetch('http://115.85.183.157:3000/cmnt/act_comment/'+idx,{method: 'GET'})
                 .then((response) => response.json())
                 .then((response) => {
                   this.setState({
@@ -131,11 +131,11 @@ export default class ContentScreen extends Component {
             {
               text: "예",
               onPress: () =>{
-                fetch('http://115.85.183.157:3000/cmnt/free_comment/'+idxx,{
+                fetch('http://115.85.183.157:3000/cmnt/act_comment/'+idxx,{
                   method:'DELETE',
                 }).then((response) => response.json()).then((response) => {
                   if(response.success){
-                    fetch('http://115.85.183.157:3000/cmnt/free_comment/'+idx,{method: 'GET'})
+                    fetch('http://115.85.183.157:3000/cmnt/act_comment/'+idx,{method: 'GET'})
                     .then((response) => response.json())
                     .then((response) => {
                       this.setState({
@@ -243,7 +243,7 @@ export default class ContentScreen extends Component {
         </View>
         </View>
         <View style={{justifyContent:'center',alignItems:'center'}}>
-        {((this.state.dataSource.img != '') && (this.state.dataSource.img != null)) && 
+        {(((this.state.dataSource.img != null) && (this.state.dataSource != '')) || this.state.dataSource.img != null) && 
           <Image source = {{uri:'http://115.85.183.157:3000'+this.state.dataSource.img}} style = {styles.image}></Image>}
         </View>
         <Text style={styles.hcontent}>{this.state.dataSource.content}</Text>
@@ -307,7 +307,8 @@ const styles = StyleSheet.create({
     hcontent: {
         marginTop:15,
         fontSize:17,
-        marginBottom: 40
+        marginBottom: 40,
+        textAlign:"center"
     },
     input:{
       borderWidth:1,

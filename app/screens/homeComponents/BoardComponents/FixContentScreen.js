@@ -12,7 +12,8 @@ export default class Write extends Component {
           dataSource: '',
           title: '',
           content: '',
-          setSelected: []
+          setSelected: '',
+          img: []
         }
       }
       componentDidMount () {
@@ -22,6 +23,7 @@ export default class Write extends Component {
         .then((response) => {
           this.setState({
             dataSource: response, //list 형태
+            setSelected: response.img
           })
         })
         .catch((error) => {
@@ -35,35 +37,47 @@ export default class Write extends Component {
             return;
         }
         
-        let picker = await ImagePicker.launchImageLibraryAsync()
-        
-        if(picker.cancelled ===true){
-            return;
+        let result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+        console.log(result)
+
+        if (!result.cancelled) {
+            this.setState({ img: result ,setSelected: ''});
         }
-        const {setSelected} = this.state
-        this.setState({setSelected: setSelected.concat(picker.uri)})
-        console.log(picker)
     }
 
     updateBoard = () => {
       const {idx} = this.props.route.params
-        if(this.state.title == ''){
-            this.setState({alarm:'제목을 입력하세요'})
-        }
-        else if(this.state.content == ""){
-            this.setState({alarm:'내용을 입력하세요'})
-        }
-        else{
+      const data = new FormData();
+      if(this.state.title == ''){
+          this.setState({alarm:'제목을 입력하세요'})
+      }
+      else if(this.state.content == ""){
+          this.setState({alarm:'내용을 입력하세요'})
+      }
+      else{
+          if((this.state.img.length != 0) && this.state.setSelected == ''){
+              let localUri = this.state.img.uri;
+              let filename = localUri.split("/").pop();
+              let match = /\.(\w+)$/.exec(filename);
+              let type = match ? `image/${match[1]}` : `image`;
+              data.append("img", {
+                  uri: localUri,
+                  name: filename,
+                  type,
+              });} //수정할 때 문제 
+              data.append("title",this.state.title)
+              data.append("content",this.state.content)
         fetch('http://115.85.183.157:3000/post/free_board/'+idx,{
             method: 'PATCH',
-            headers:{
-                'Accept' : 'application/json',
-                'Content-Type' : 'application/json'
+            body:data,
+            headers: {
+                "content-type": "multipart/form-data",
             },
-            body:JSON.stringify({
-                title : this.state.title,
-                content: this.state.content
-            }),
         })
         .then((response) => response.json())
         .then((response)=>{
@@ -94,12 +108,11 @@ export default class Write extends Component {
                 <View>
                     <Text style={{color:'red',alignSelf: 'center'}}>{this.state.alarm}</Text>
                 </View>
-                {
-                        this.state.setSelected.length ?
-                        (<FlatList data={this.state.setSelected} horizontal = {true} 
-                            renderItem = {renderImage} keyExtractor = {(item,index) => index.toString()} />
+                 {
+                        this.state.setSelected !== '' ?
+                        (<Image source = {{uri:'http://115.85.183.157:3000'+this.state.setSelected}} style = {styles.image}></Image>
         
-                        ) : <Text>사진을 추가하세요!!</Text>
+                        ) : <Image source = {{uri:this.state.img.uri}} style = {styles.image}></Image>
                     }
                 <View style={styles.writingform}>
                     <TextInput style={styles.input} defaultValue={this.state.dataSource.title}

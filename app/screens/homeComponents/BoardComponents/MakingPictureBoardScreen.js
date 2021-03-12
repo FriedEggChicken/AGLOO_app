@@ -12,15 +12,10 @@ import { ScrollView } from "react-native-gesture-handler";
 export default class Write extends Component {
     constructor(props){
 		super(props)
-
-        // const [loading,setLoading] = useState(false);
-        // const [hasAllow, setHasAllow] = useState(false);
 		this.state={
 		title: '',
         content: '',
-        img: [],
-        image: [], //2,3개 이미지 들어갈 때 어떻게 할 것인지
-        setSelected: []
+        img: []
 		}
 	}
     
@@ -68,7 +63,7 @@ export default class Write extends Component {
                 data.append("id",user_id)
                 data.append("title",title)
                 data.append("content",content)
-        fetch('http://115.85.183.157:3000/post/1/free_board',{
+        fetch('http://115.85.183.157:3000/post/1/act_board',{
             method: 'POST',
             body:data,
             headers: {
@@ -78,7 +73,7 @@ export default class Write extends Component {
         .then((response) => response.json())
         .then((response)=>{
             if(response.success){
-                this.props.navigation.navigate("BoardScreen");
+                this.props.navigation.navigate("PictureBoardScreen");
             }else{
                 alert(response.msg);
             }
@@ -91,6 +86,7 @@ export default class Write extends Component {
     };
 
     render() {
+        
         return(
             <View style={{flex: 1, backgroundColor:"#ebf4f6"}}>
             <ScrollView>
