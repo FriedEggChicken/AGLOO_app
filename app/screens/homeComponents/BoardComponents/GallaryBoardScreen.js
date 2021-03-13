@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {View,RefreshControl,ImageBackground,Alert,Text,Button,SafeAreaView,StyleSheet,ScrollView,TouchableOpacity,FlatList,ActivityIndicator} from "react-native";
+import {View,RefreshControl,Image,Alert,Text,Button,SafeAreaView,StyleSheet,ScrollView,TouchableOpacity,FlatList,ActivityIndicator} from "react-native";
 import axios from 'axios';
 import Constants from 'expo-constants'
 import StickyHeaderFooterScrollView from 'react-native-sticky-header-footer-scroll-view';
 import { RefreshControlComponent } from 'react-native';
 
 
-export default class NoticeBoardScreen extends Component {
+export default class BoardScreen extends Component {
 
   constructor(props) {
     super(props);
@@ -19,7 +19,7 @@ export default class NoticeBoardScreen extends Component {
 
   componentDidMount () {
     const {club_id} = this.props.route.params
-    return fetch('http://115.85.183.157:3000/list/'+club_id+'/notice_board',{method: 'GET'})//get 
+    return fetch('http://115.85.183.157:3000/list/'+club_id+'/pic_board',{method: 'GET'})//get 
     .then((response) => response.json())
     .then((response) => {
       this.setState({
@@ -42,11 +42,11 @@ export default class NoticeBoardScreen extends Component {
         {
           text: "예",
           onPress: () =>{
-            fetch('http://115.85.183.157:3000/post/notice_board/'+idx,{
+            fetch('http://115.85.183.157:3000/post/pic_board/'+idx,{
               method:'DELETE',
             }).then((response) => response.json()).then((response) => {
               if(response.success){
-                fetch('http://115.85.183.157:3000/list/'+club_id+'/notice_board',{method: 'GET'})
+                fetch('http://115.85.183.157:3000/list/'+club_id+'/pic_board',{method: 'GET'})
                 .then((response) => response.json())
                 .then((response) => {
                   this.setState({
@@ -77,7 +77,7 @@ export default class NoticeBoardScreen extends Component {
   handleRefresh = (() => {
     const {club_id} = this.props.route.params
     this.setState({refreshing: true})
-    fetch('http://115.85.183.157:3000/list/'+club_id+'/notice_board',{method: 'GET'})//get 
+    fetch('http://115.85.183.157:3000/list/'+club_id+'/pic_board',{method: 'GET'})//get 
     .then((response) => response.json())
     .then((response) => {
       this.setState({
@@ -104,7 +104,6 @@ export default class NoticeBoardScreen extends Component {
     if(now.getFullYear() > datee.getFullYear()){
         minus= now.getFullYear()-datee.getFullYear();
   
-        console.log(minus+"년 전");
         return (minus+"년 전")
     }else if(now.getMonth() > datee.getMonth()){
   
@@ -142,22 +141,26 @@ export default class NoticeBoardScreen extends Component {
       const {club_id} = this.props.route.params
       const renderlist = ({item}) => (
       <View style = {styles.item}> 
-        <TouchableOpacity style = {{width:'90%'}} onPress = {()=>this.props.navigation.navigate("NoticeContentScreen",{idx:item.idx,user_id:user_id,member:member})}>
+        <TouchableOpacity onPress = {()=>this.props.navigation.navigate("GallaryContentScreen",{idx:item.idx,user_id:user_id,member:member})}>
           <Text style={styles.writes}>{item.title}</Text>
-          <View style={{flexDirection:'row'}}>
-          <Text style={{}}>작성자: {item.writer}</Text>
-          <Text>   {item.created}   ⏰ {this.timeBefore(item.created)}</Text> 
-          </View>                     
+          <View style={{justifyContent:'center',alignItems:'center'}}>
+          {(((item.img != null) && (item.img != ''))) && 
+          <Image source = {{uri:'http://115.85.183.157:3000'+item.img}} style = {styles.image}></Image>}
+          </View>
+          
+          {item.updated == item.created ?
+            (<Text style={{textAlign:'center',fontSize:18,marginBottom:10,color:'gray'}}>{this.timeBefore(item.created)}</Text>)
+          : <Text style={{textAlign:'center',fontSize:18,marginBottom:10,color:'gray'}}>{this.timeBefore(item.updated)} 수정</Text>}                   
           </TouchableOpacity>
-        {(user_id == item.id || member == 'admin') &&  <View style={{flex:1,alignItems:"flex-end" ,justifyContent:"flex-end"}}>
-        <View style={{justifyContent:'space-around' ,flexDirection:'column'}}>
+        {(user_id == item.id || member == 'admin') &&  <View style={{flex:1,alignItems:'flex-end' ,justifyContent:"center"}}>
+        <View style={{flexDirection:'row'}}>
               <TouchableOpacity style={styles.button}
       onPress = {()=>this.deleteWrites(item.idx)}
       >
       <Text style={{color:'white',fontSize:18,fontWeight: 'bold'}}>삭제</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}
-      onPress = {()=>this.props.navigation.navigate("NoticeFixContentScreen",{idx:item.idx})}
+      onPress = {()=>this.props.navigation.navigate("FixGallaryScreen",{idx:item.idx})}
       >
       <Text style={{color:'white',fontSize:18,fontWeight: 'bold'}}>수정</Text>
       </TouchableOpacity>
@@ -175,17 +178,17 @@ export default class NoticeBoardScreen extends Component {
       else {
         return (
           
-          <View style={{flex: 1, backgroundColor:"#ebf4f6"}}>
+          <View style={{flex: 1, backgroundColor:"#ebf4f6",paddingTop: Constants.statusBarHeight}}>
         
           <View>
           <FlatList data={this.state.dataSource} 
           renderItem = {renderlist} 
           keyExtractor = {(item,index) => index.toString()} 
           ListHeaderComponent= {() => (
-            <View style={{paddingTop: Constants.statusBarHeight}}>
-              <Text style={styles.firstsquare}>공 지 사 항</Text>
+            <View>
+              <Text style={styles.firstsquare}>갤 러 리</Text>
               <View style={styles.settingg}>
-              {(member == 'admin') && <TouchableOpacity onPress = {()=>this.props.navigation.navigate("MakeNoticeScreen",{user_id:user_id,club_id:club_id})}>
+              {(member == 'admin') && <TouchableOpacity onPress = {()=>this.props.navigation.navigate("MakingGallaryScreen",{user_id:user_id,club_id:club_id})}>
           <Text style={styles.buttonText}>📝 작성</Text>
           </TouchableOpacity>}
               </View>
@@ -218,7 +221,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
     item: {
-      flexDirection: "row",
       borderBottomWidth : 1,
       borderBottomColor : "#a7b4c9"
     },
@@ -235,6 +237,7 @@ const styles = StyleSheet.create({
       marginBottom: 10
     },
     writes:{
+      textAlign:'center',
       fontSize: 25,
       fontWeight: 'bold'
     },
@@ -257,6 +260,11 @@ const styles = StyleSheet.create({
         opacity:0.7,
         justifyContent: "center",
         alignItems: "center",
-        width: "100%"
+        width: "15%"
       },
+      image: {
+        width:250,
+        height: 250,
+        resizeMode: 'contain'
+    }
   });

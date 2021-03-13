@@ -95,11 +95,12 @@ export default class NoticeFixContentScreen extends Component {
                     <Text style={{color:'red',alignSelf: 'center'}}>{this.state.alarm}</Text>
                 </View>
                 {
-                        this.state.setSelected.length ?
-                        (<FlatList data={this.state.setSelected} horizontal = {true} 
-                            renderItem = {renderImage} keyExtractor = {(item,index) => index.toString()} />
+                        this.state.setSelected !== null ?
+                        (this.state.setSelected == '' ? 
+                        (<Image source = {{uri:this.state.img.uri}} style = {styles.image}></Image>) :
+                        (<Image source = {{uri:('http://115.85.183.157:3000'+this.state.setSelected)}} style = {styles.image}></Image>)
         
-                        ) : <Text>사진을 추가하세요!!</Text>
+                        ) : <Text></Text>
                     }
                 <View style={styles.writingform}>
                     <TextInput style={styles.input} defaultValue={this.state.dataSource.title}

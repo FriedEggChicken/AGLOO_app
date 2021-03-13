@@ -64,7 +64,7 @@ export default class Write extends Component {
                 data.append("id",user_id)
                 data.append("title",title)
                 data.append("content",content)
-        fetch('http://115.85.183.157:3000/post/'+club_id+'/act_board',{
+        fetch('http://115.85.183.157:3000/post/'+club_id+'/pic_board',{
             method: 'POST',
             body:data,
             headers: {
@@ -74,7 +74,7 @@ export default class Write extends Component {
         .then((response) => response.json())
         .then((response)=>{
             if(response.success){
-                this.props.navigation.navigate("PictureBoardScreen");
+                this.props.navigation.navigate("GallaryBoardScreen");
             }else{
                 alert(response.msg);
             }
@@ -202,3 +202,4 @@ const styles = StyleSheet.create({
           resizeMode: 'contain'
       }
   });
+

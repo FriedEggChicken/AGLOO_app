@@ -13,6 +13,10 @@ import PictureBoardScreen from './BoardComponents/PictureBoardScreen'
 import ContentPictureScreen from './BoardComponents/ContentPictureScreen'
 import MakingPictureBoardScreen from './BoardComponents/MakingPictureBoardScreen'
 import FixPictureBoardScreen from './BoardComponents/FixPictureBoardScreen'
+import GallaryBoardScreen from './BoardComponents/GallaryBoardScreen'
+import GallaryContentScreen from './BoardComponents/GallaryContentScreen'
+import MakingGallaryScreen from './BoardComponents/MakingGallaryScreen'
+import FixGallaryScreen from './BoardComponents/FixGallaryScreen'
 import ClubTableScreen from './BoardComponents/ClubTableScreen';
 import MembersTableScreen from './BoardComponents/MembersTableScreen';
 
@@ -34,15 +38,19 @@ export default function MyClub({route}) {
         <ClubStack.Screen name = "BoardScreen" component={BoardScreen}/>
         <ClubStack.Screen name = "NoticeBoardScreen" component={NoticeBoardScreen}/>
         <ClubStack.Screen name = "PictureBoardScreen" component={PictureBoardScreen}/>
+        <ClubStack.Screen name = "GallaryBoardScreen" component={GallaryBoardScreen}/>
         <ClubStack.Screen name = "makingboard" component={MakingBoardScreen}/>
         <ClubStack.Screen name = "MakeNoticeScreen" component={MakeNoticeScreen}/>
         <ClubStack.Screen name = "MakingPictureBoardScreen" component={MakingPictureBoardScreen}/>
+        <ClubStack.Screen name = "MakingGallaryScreen" component={MakingGallaryScreen}/>
         <ClubStack.Screen name = "contentscreen" component={ContentScreen}/>
         <ClubStack.Screen name = "NoticeContentScreen" component={NoticeContentScreen}/>
         <ClubStack.Screen name = "ContentPictureScreen" component={ContentPictureScreen}/>
+        <ClubStack.Screen name = "GallaryContentScreen" component={GallaryContentScreen}/>
         <ClubStack.Screen name ="fixcontentscreen" component={FixContentScreen}/>
         <ClubStack.Screen name ="NoticeFixContentScreen" component={NoticeFixContentScreen}/>
         <ClubStack.Screen name ="FixPictureBoardScreen" component={FixPictureBoardScreen}/>
+        <ClubStack.Screen name ="FixGallaryScreen" component={FixGallaryScreen}/>
         <ClubStack.Screen name ="clubtablescreen">
           {(props)=> <ClubTableScreen {...props} club_id = {club_id} />}
         </ClubStack.Screen>

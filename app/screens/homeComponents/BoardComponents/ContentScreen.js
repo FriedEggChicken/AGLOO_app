@@ -175,7 +175,7 @@ export default class ContentScreen extends Component {
       const rendercomment = ({item}) => (
         <View>
           <View style = {styles.item}> 
-            <Text style={{fontWeight:'bold',fontSize:18}}>{item.id}: </Text>
+            <Text style={{fontWeight:'bold',fontSize:18}}>{item.writer}: </Text>
             <Text style={{fontSize:18}}>{item.comment}</Text>
             {((member == 'admin') || (item.id == user_id)) &&  <View style={{flex:1,alignItems:"flex-end" ,justifyContent:"flex-end"}}>
         <View style={{justifyContent:'space-around' ,flexDirection:'row'}}>

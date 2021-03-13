@@ -23,7 +23,6 @@ export default class Write extends Component {
         .then((response) => {
           this.setState({
             dataSource: response, //list 형태
-            setSelected: response.img
           })
         })
         .catch((error) => {
@@ -47,6 +46,9 @@ export default class Write extends Component {
 
         if (!result.cancelled) {
             this.setState({ img: result ,setSelected: ''});
+        }
+        else{
+          this.setState({setSelected: ''})
         }
     }
 
@@ -95,11 +97,7 @@ export default class Write extends Component {
     };
 
     render() {
-      const renderImage = ({item}) => (
-        <View>
-            <Image source = {{uri:item}} style = {styles.image}></Image>
-        </View>
-    )
+      console.log(this.state.setSelected)
         return(
           <View style={{flex: 1, backgroundColor:"#ebf4f6"}}>
             <ScrollView>
@@ -108,11 +106,13 @@ export default class Write extends Component {
                 <View>
                     <Text style={{color:'red',alignSelf: 'center'}}>{this.state.alarm}</Text>
                 </View>
-                 {
-                        this.state.setSelected !== '' ?
-                        (<Image source = {{uri:'http://115.85.183.157:3000'+this.state.setSelected}} style = {styles.image}></Image>
+                {
+                        this.state.setSelected !== null ?
+                        (this.state.setSelected == '' ? 
+                        (<Image source = {{uri:this.state.img.uri}} style = {styles.image}></Image>) :
+                        (<Image source = {{uri:('http://115.85.183.157:3000'+this.state.setSelected)}} style = {styles.image}></Image>)
         
-                        ) : <Image source = {{uri:this.state.img.uri}} style = {styles.image}></Image>
+                        ) : <Text></Text>
                     }
                 <View style={styles.writingform}>
                     <TextInput style={styles.input} defaultValue={this.state.dataSource.title}

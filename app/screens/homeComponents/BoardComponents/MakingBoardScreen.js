@@ -45,6 +45,7 @@ export default class Write extends Component {
     }
     
     postBoard = () => {
+        const {club_id} = this.props.route.params
         const{title,content} = this.state;
         const {user_id} = this.props.route.params
         const data = new FormData();
@@ -68,7 +69,7 @@ export default class Write extends Component {
                 data.append("id",user_id)
                 data.append("title",title)
                 data.append("content",content)
-        fetch('http://115.85.183.157:3000/post/1/free_board',{
+        fetch('http://115.85.183.157:3000/post/'+club_id+'/free_board',{
             method: 'POST',
             body:data,
             headers: {

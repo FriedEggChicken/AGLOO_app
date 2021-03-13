@@ -18,7 +18,8 @@ export default class BoardScreen extends Component {
   }
 
   componentDidMount () {
-    return fetch('http://115.85.183.157:3000/list/1/free_board',{method: 'GET'})//get 
+    const {club_id} = this.props.route.params
+    return fetch('http://115.85.183.157:3000/list/'+club_id+'/free_board',{method: 'GET'})//get 
     .then((response) => response.json())
     .then((response) => {
       this.setState({
@@ -33,6 +34,7 @@ export default class BoardScreen extends Component {
     })
   }
   deleteWrites = (idx) => {
+    const {club_id} = this.props.route.params
     Alert.alert(
       "글을 지우겠습니까?",
       "",
@@ -44,7 +46,7 @@ export default class BoardScreen extends Component {
               method:'DELETE',
             }).then((response) => response.json()).then((response) => {
               if(response.success){
-                fetch('http://115.85.183.157:3000/list/1/free_board',{method: 'GET'})
+                fetch('http://115.85.183.157:3000/list/'+club_id+'/free_board',{method: 'GET'})
                 .then((response) => response.json())
                 .then((response) => {
                   this.setState({
@@ -73,8 +75,9 @@ export default class BoardScreen extends Component {
     );
   }
   handleRefresh = (() => {
+    const {club_id} = this.props.route.params
     this.setState({refreshing: true})
-    fetch('http://115.85.183.157:3000/list/1/free_board',{method: 'GET'})//get 
+    fetch('http://115.85.183.157:3000/list/'+club_id+'/free_board',{method: 'GET'})//get 
     .then((response) => response.json())
     .then((response) => {
       this.setState({
@@ -135,6 +138,7 @@ export default class BoardScreen extends Component {
     render(){
       const {user_id} = this.props.route.params
       const {member} = this.props.route.params
+      const {club_id} = this.props.route.params
       const renderlist = ({item}) => (
       <View style = {styles.item}> 
         <TouchableOpacity style = {{}} onPress = {()=>this.props.navigation.navigate("contentscreen",{idx:item.idx,user_id:user_id,member:member})}>
@@ -187,7 +191,7 @@ export default class BoardScreen extends Component {
             <View style={{paddingTop: Constants.statusBarHeight}}>
               <Text style={styles.firstsquare}>자 유 게 시 판</Text>
               <View style={styles.settingg}>
-              <TouchableOpacity onPress = {()=>this.props.navigation.navigate("makingboard",{user_id:user_id})}>
+              <TouchableOpacity onPress = {()=>this.props.navigation.navigate("makingboard",{user_id:user_id,club_id:club_id})}>
           <Text style={styles.buttonText}>📝 작성</Text>
           </TouchableOpacity>
               </View>
@@ -223,8 +227,7 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       borderBottomWidth : 1,
       borderBottomColor : "#a7b4c9",
-      justifyContent: 'center',
-      alignItems:'center'
+ 
     },
     settingg: {
       position:'absolute',

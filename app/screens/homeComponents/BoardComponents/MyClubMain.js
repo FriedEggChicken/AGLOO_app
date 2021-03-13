@@ -193,6 +193,7 @@ export default class MyClubMain extends Component {
 
   render() {
     const user_id = this.props.user_id
+    const club_id = this.props.club_id;
     const member = this.props.member
     const { modalVisible } = this.state;
     const adminText = ["동아리 폐쇄", "회원탈퇴", "가입신청"];
@@ -344,7 +345,7 @@ export default class MyClubMain extends Component {
           >
             <TouchableOpacity style = {styles.button} onPress={()=>{
                 if(member == 'admin' || member == true){
-                this.props.navigation.navigate("NoticeBoardScreen",{user_id:user_id ,member:member})
+                this.props.navigation.navigate("NoticeBoardScreen",{user_id:user_id ,member:member,club_id:club_id})
               }
               else{
                 alert('동아리 가입을 해야합니다.')
@@ -354,7 +355,7 @@ export default class MyClubMain extends Component {
               </TouchableOpacity>
               <TouchableOpacity style = {styles.button} onPress={()=>{
                 if(member == 'admin' || member == true){
-                this.props.navigation.navigate("BoardScreen",{user_id:user_id ,member:member})
+                this.props.navigation.navigate("BoardScreen",{user_id:user_id ,member:member,club_id:club_id})
               }
               else{
                 alert('동아리 가입을 해야합니다.')
@@ -367,10 +368,17 @@ export default class MyClubMain extends Component {
             style={{ flexDirection: "row", justifyContent: "space-evenly" }}
           >
             <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>사진갤러리</Text>
+              <Text style={styles.buttonText} onPress={()=>{
+                if(member == 'admin' || member == true){
+                this.props.navigation.navigate("GallaryBoardScreen",{user_id:user_id ,member:member,club_id:club_id})
+              }
+              else{
+                alert('동아리 가입을 해야합니다.')
+              }
+              }}>사진갤러리</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() =>
-               {this.props.navigation.navigate("PictureBoardScreen",{user_id:user_id ,member:member})}}>
+               {this.props.navigation.navigate("PictureBoardScreen",{user_id:user_id ,member:member,club_id:club_id})}}>
               <Text style={styles.buttonText}>활동게시판</Text>
             </TouchableOpacity>
           </View>

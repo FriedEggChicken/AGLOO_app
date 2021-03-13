@@ -18,7 +18,8 @@ export default class BoardScreen extends Component {
   }
 
   componentDidMount () {
-    return fetch('http://115.85.183.157:3000/list/1/act_board',{method: 'GET'})//get 
+    const {club_id} = this.props.route.params
+    return fetch('http://115.85.183.157:3000/list/'+club_id+'/act_board',{method: 'GET'})//get 
     .then((response) => response.json())
     .then((response) => {
       this.setState({
@@ -33,6 +34,7 @@ export default class BoardScreen extends Component {
     })
   }
   deleteWrites = (idx) => {
+    const {club_id} = this.props.route.params
     Alert.alert(
       "글을 지우겠습니까?",
       "",
@@ -44,7 +46,7 @@ export default class BoardScreen extends Component {
               method:'DELETE',
             }).then((response) => response.json()).then((response) => {
               if(response.success){
-                fetch('http://115.85.183.157:3000/list/1/act_board',{method: 'GET'})
+                fetch('http://115.85.183.157:3000/list/'+club_id+'/act_board',{method: 'GET'})
                 .then((response) => response.json())
                 .then((response) => {
                   this.setState({
@@ -73,8 +75,9 @@ export default class BoardScreen extends Component {
     );
   }
   handleRefresh = (() => {
+    const {club_id} = this.props.route.params
     this.setState({refreshing: true})
-    fetch('http://115.85.183.157:3000/list/1/act_board',{method: 'GET'})//get 
+    fetch('http://115.85.183.157:3000/list/'+club_id+'/act_board',{method: 'GET'})//get 
     .then((response) => response.json())
     .then((response) => {
       this.setState({
@@ -135,6 +138,7 @@ export default class BoardScreen extends Component {
     render(){
       const {user_id} = this.props.route.params
       const {member} = this.props.route.params
+      const {club_id} = this.props.route.params
       const renderlist = ({item}) => (
       <View style = {styles.item}> 
         <TouchableOpacity onPress = {()=>this.props.navigation.navigate("ContentPictureScreen",{idx:item.idx,user_id:user_id,member:member})}>
@@ -144,7 +148,9 @@ export default class BoardScreen extends Component {
           <Image source = {{uri:'http://115.85.183.157:3000'+item.img}} style = {styles.image}></Image>}
           </View>
           
-          <Text style={{textAlign:'center',fontSize:18,marginBottom:10,color:'gray'}}>{this.timeBefore(item.created)}</Text>                   
+          {item.updated == item.created ?
+            (<Text style={{textAlign:'center',fontSize:18,marginBottom:10,color:'gray'}}>{this.timeBefore(item.created)}</Text>)
+          : <Text style={{textAlign:'center',fontSize:18,marginBottom:10,color:'gray'}}>{this.timeBefore(item.updated)} 수정</Text>}                   
           </TouchableOpacity>
         {(user_id == item.id || member == 'admin') &&  <View style={{flex:1,alignItems:'flex-end' ,justifyContent:"center"}}>
         <View style={{flexDirection:'row'}}>
@@ -182,7 +188,7 @@ export default class BoardScreen extends Component {
             <View>
               <Text style={styles.firstsquare}>활 동 게 시 판</Text>
               <View style={styles.settingg}>
-              {(member == 'admin') && <TouchableOpacity onPress = {()=>this.props.navigation.navigate("MakingPictureBoardScreen",{user_id:user_id})}>
+              {(member == 'admin') && <TouchableOpacity onPress = {()=>this.props.navigation.navigate("MakingPictureBoardScreen",{user_id:user_id,club_id:club_id})}>
           <Text style={styles.buttonText}>📝 작성</Text>
           </TouchableOpacity>}
               </View>

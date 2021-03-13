@@ -25,6 +25,7 @@ export default class Write extends Component {
             dataSource: response, //list 형태
             setSelected: response.img
           })
+          console.log(this.state.setSelected)
         })
         .catch((error) => {
           console.log(error)
@@ -47,6 +48,9 @@ export default class Write extends Component {
 
         if (!result.cancelled) {
             this.setState({ img: result ,setSelected: ''});
+        }
+        else{
+          this.setState({setSelected: ''})
         }
     }
 
@@ -105,10 +109,12 @@ export default class Write extends Component {
                     <Text style={{color:'red',alignSelf: 'center'}}>{this.state.alarm}</Text>
                 </View>
                 {
-                        this.state.setSelected !== '' ?
-                        (<Image source = {{uri:'http://115.85.183.157:3000'+this.state.setSelected}} style = {styles.image}></Image>
+                        this.state.setSelected !== null ?
+                        (this.state.setSelected == '' ? 
+                        (<Image source = {{uri:this.state.img.uri}} style = {styles.image}></Image>) :
+                        (<Image source = {{uri:('http://115.85.183.157:3000'+this.state.setSelected)}} style = {styles.image}></Image>)
         
-                        ) : <Image source = {{uri:this.state.img.uri}} style = {styles.image}></Image>
+                        ) : <Text></Text>
                     }
                 <View style={styles.writingform}>
                     <TextInput style={styles.input} defaultValue={this.state.dataSource.title}

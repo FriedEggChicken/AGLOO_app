@@ -19,7 +19,7 @@ export default class ContentScreen extends Component {
 
       componentDidMount () {
         const {idx} = this.props.route.params || ''
-        return (fetch('http://115.85.183.157:3000/post/act_board/'+idx,{method: 'GET'})
+        return (fetch('http://115.85.183.157:3000/post/pic_board/'+idx,{method: 'GET'})
         .then((response) => response.json())
         .then((response) => {
           this.setState({
@@ -29,7 +29,7 @@ export default class ContentScreen extends Component {
         .catch((error) => {
           console.log(error)
         }),
-        fetch('http://115.85.183.157:3000/cmnt/act_comment/'+idx,{method: 'GET'})
+        fetch('http://115.85.183.157:3000/cmnt/pic_comment/'+idx,{method: 'GET'})
         .then((response)=>response.json())
         .then((response) => {
           this.setState({
@@ -50,7 +50,7 @@ export default class ContentScreen extends Component {
           alert('댓글을 입력하세요')
         }
         else{
-          fetch('http://115.85.183.157:3000/cmnt/act_comment/'+idx,{
+          fetch('http://115.85.183.157:3000/cmnt/pic_comment/'+idx,{
             method:'POST',
             headers:{
               'Accept' : 'application/json',
@@ -64,7 +64,7 @@ export default class ContentScreen extends Component {
         .then((response) => response.json())
         .then((response)=>{
             if(response.success){
-              fetch('http://115.85.183.157:3000/cmnt/act_comment/'+idx,{method: 'GET'})
+              fetch('http://115.85.183.157:3000/cmnt/pic_comment/'+idx,{method: 'GET'})
                     .then((response) => response.json())
                     .then((response) => {
                       this.setState({
@@ -90,7 +90,7 @@ export default class ContentScreen extends Component {
             alert('댓글을 입력하세요')
           }
           else{
-          fetch('http://115.85.183.157:3000/cmnt/act_comment/'+dx,{
+          fetch('http://115.85.183.157:3000/cmnt/pic_comment/'+dx,{
               method: 'PATCH',
               headers:{
                   'Accept' : 'application/json',
@@ -103,7 +103,7 @@ export default class ContentScreen extends Component {
           .then((response) => response.json())
           .then((response)=>{
               if(response.success){
-                fetch('http://115.85.183.157:3000/cmnt/act_comment/'+idx,{method: 'GET'})
+                fetch('http://115.85.183.157:3000/cmnt/pic_comment/'+idx,{method: 'GET'})
                 .then((response) => response.json())
                 .then((response) => {
                   this.setState({
@@ -131,11 +131,11 @@ export default class ContentScreen extends Component {
             {
               text: "예",
               onPress: () =>{
-                fetch('http://115.85.183.157:3000/cmnt/act_comment/'+idxx,{
+                fetch('http://115.85.183.157:3000/cmnt/pic_comment/'+idxx,{
                   method:'DELETE',
                 }).then((response) => response.json()).then((response) => {
                   if(response.success){
-                    fetch('http://115.85.183.157:3000/cmnt/act_comment/'+idx,{method: 'GET'})
+                    fetch('http://115.85.183.157:3000/cmnt/pic_comment/'+idx,{method: 'GET'})
                     .then((response) => response.json())
                     .then((response) => {
                       this.setState({

@@ -41,6 +41,7 @@ export default class HomeMain extends Component {
       member: '',
       feed: [],
       feed_: [],
+      club_id: ''
     };
     
 }
@@ -66,7 +67,7 @@ export default class HomeMain extends Component {
 			}),
 		})
 		.then((response) => response.json())
-		 .then((response)=>{
+		 .then((response)=>{console.log(response)
 			 if(response.success){
         this.setState({userID:response.id})
 			 }
@@ -95,28 +96,35 @@ export default class HomeMain extends Component {
         //this.setState({ isLoading : false });
       });
 
-      fetch('http://115.85.183.157:3000/isMember/1/'+this.state.userID,{method: 'GET' })
+      fetch('http://115.85.183.157:3000/isMember/'+'1'+'/'+this.state.userID,{method: 'GET' }) //1로 가라쳐놧는데 바꾸겟습니다
       .then((response) => response.json())
       .then((response) => {
         this.setState({member:response.member})
+        console.log(this.state.member)
       })
       .catch((error) => {
         console.log(error)
       })
 
-      fetch('http://115.85.183.157:3000/feed/james/notice_board',{method: 'GET' })
+      fetch('http://115.85.183.157:3000/feed/'+this.state.userID+'/notice_board',{method: 'GET' })
       .then((response) => response.json())
       .then((response) => {
         this.setState({feed:response})
+        // if(!this.state.feed.success){
+        //   this.setState({feed:response.msg})
+        // }
       })
       .catch((error) => {
         console.log(error)
       })
 
-      fetch('http://115.85.183.157:3000/feed/james/free_board',{method: 'GET' })
+      fetch('http://115.85.183.157:3000/feed/'+this.state.userID+'/free_board',{method: 'GET' })
       .then((response) => response.json())
       .then((response) => {
         this.setState({feed_:response})
+        // if(!this.state.feed_.success){
+        //   this.setState({feed_:response.msg})
+        // }
       })
       .catch((error) => {
         console.log(error)
@@ -165,43 +173,55 @@ export default class HomeMain extends Component {
   }
   render() {
     const { data } = this.state;
-    let feeds = this.state.feed.map((val,key) => {
-      return <View key={key} style={{flex:1,paddingHorizontal: 20,backgroundColor:'#ebf4f6'}}>
-        <TouchableOpacity onPress = {()=>this.props.navigation.navigate("homeboardscreen",{idx:val.idx,user_id:this.state.userID, member: this.state.member})}>
-
-        <View style={{flexDirection:'row'}}>
-      <Text style={{fontWeight:'bold',fontSize:16}}>{val.title}</Text>
-      </View>
-      <Text style={{fontWeight:'bold',fontSize:13, color : 'grey'}}>작성자: {val.writer} from {val.club_name}</Text>
-      <View style={{flexDirection:'row',width:'100%',borderBottomWidth : 1,
-      borderBottomColor : "#a7b4c9"}}>
-      <Text style = {{color : "grey"}}>조회수: {val.hit}</Text>
-      {val.updated === val.created ? (<Text style = {{color : "grey"}}> 생성: {val.created}</Text>) : 
-      (<Text style = {{color : "grey"}}> 수정: {val.updated}</Text>)}
-      <Text style = {{color : "grey",position : 'absolute', marginLeft : 300 }}>{this.timeBefore(val.created)}</Text>
+    let feeds,feedss
+    if(this.state.feed.msg == "가입된 동아리가 없습니다"){
+      feeds = <Text style={{textAlign:'center',fontSize:20,fontWeight:'bold',marginTop:10}}>{this.state.feed.msg}</Text>
+    }
+    else{
+      feeds = this.state.feed.map((val,key) => {
+        return <View key={key} style={{flex:1,paddingHorizontal: 20,backgroundColor:'#ebf4f6'}}>
+          <TouchableOpacity onPress = {()=>this.props.navigation.navigate("homeboardscreen",{idx:val.idx,user_id:this.state.userID, member: this.state.member})}>
+  
+          <View style={{flexDirection:'row'}}>
+        <Text style={{fontWeight:'bold',fontSize:16}}>{val.title}</Text>
         </View>
-        </TouchableOpacity>
-      </View>
-    })
+        <Text style={{fontWeight:'bold',fontSize:13, color : 'grey'}}>작성자: {val.writer} from {val.club_name}</Text>
+        <View style={{flexDirection:'row',width:'100%',borderBottomWidth : 1,
+        borderBottomColor : "#a7b4c9"}}>
+        <Text style = {{color : "grey"}}>조회수: {val.hit}</Text>
+        {val.updated === val.created ? (<Text style = {{color : "grey"}}> 생성: {val.created}</Text>) : 
+        (<Text style = {{color : "grey"}}> 수정: {val.updated}</Text>)}
+        <Text style = {{color : "grey",position : 'absolute', marginLeft : 300 }}>{this.timeBefore(val.created)}</Text>
+          </View>
+          </TouchableOpacity>
+        </View>
+      })
+    }
+    
 
-    let feedss = this.state.feed_.map((val,key) => {
-      return<View key={key} style={{flex:1,paddingHorizontal: 20,backgroundColor:'#ebf4f6'}}>
-      <TouchableOpacity onPress = {()=>this.props.navigation.navigate("homeboardsscreen",{idx:val.idx,user_id:this.state.userID, member: this.state.member})}>
-
-      <View style={{flexDirection:'row'}}>
-    <Text style={{fontWeight:'bold',fontSize:16}}>{val.title}</Text>
-    </View>
-    <Text style={{fontWeight:'bold',fontSize:13, color : 'grey'}}>작성자: {val.writer} from {val.club_name}</Text>
-    <View style={{flexDirection:'row',width:'100%',borderBottomWidth : 1,
-    borderBottomColor : "#a7b4c9"}}>
-    <Text style = {{color : "grey"}}>조회수: {val.hit}</Text>
-    {val.updated === val.created ? (<Text style = {{color : "grey"}}> 생성: {val.created}</Text>) : 
-    (<Text style = {{color : "grey"}}> 수정: {val.updated}</Text>)}
-    <Text style = {{color : "grey",position : 'absolute', marginLeft : 300 }}>{this.timeBefore(val.created)}</Text>
-      </View>
-      </TouchableOpacity>
-    </View>
-    })
+    if(this.state.feed_.msg == "가입된 동아리가 없습니다"){
+      feedss = <Text style={{textAlign:'center',fontSize:20,fontWeight:'bold',marginTop:10}}>{this.state.feed_.msg}</Text>
+    }
+    else{
+      feedss = this.state.feed_.map((val,key) => {
+        return <View key={key} style={{flex:1,paddingHorizontal: 20,backgroundColor:'#ebf4f6'}}>
+          <TouchableOpacity onPress = {()=>this.props.navigation.navigate("homeboardscreen",{idx:val.idx,user_id:this.state.userID, member: this.state.member})}>
+  
+          <View style={{flexDirection:'row'}}>
+        <Text style={{fontWeight:'bold',fontSize:16}}>{val.title}</Text>
+        </View>
+        <Text style={{fontWeight:'bold',fontSize:13, color : 'grey'}}>작성자: {val.writer} from {val.club_name}</Text>
+        <View style={{flexDirection:'row',width:'100%',borderBottomWidth : 1,
+        borderBottomColor : "#a7b4c9"}}>
+        <Text style = {{color : "grey"}}>조회수: {val.hit}</Text>
+        {val.updated === val.created ? (<Text style = {{color : "grey"}}> 생성: {val.created}</Text>) : 
+        (<Text style = {{color : "grey"}}> 수정: {val.updated}</Text>)}
+        <Text style = {{color : "grey",position : 'absolute', marginLeft : 300 }}>{this.timeBefore(val.created)}</Text>
+          </View>
+          </TouchableOpacity>
+        </View>
+      })
+    }
 
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#aaced7" }}>

@@ -39,6 +39,7 @@ export default class MakeNoticeScreen extends Component {
     }
     
     postBoard = () => {
+        const {club_id} = this.props.route.params
         const{title,content} = this.state;
         const {user_id} = this.props.route.params
         if(title == ''){
@@ -48,7 +49,7 @@ export default class MakeNoticeScreen extends Component {
             this.setState({alarm:'내용을 입력하세요'})
         }
         else{
-        fetch('http://115.85.183.157:3000/post/1/notice_board',{
+        fetch('http://115.85.183.157:3000/post/'+club_id+'/notice_board',{
             method: 'POST',
             headers:{
                 'Accept' : 'application/json',
@@ -97,7 +98,7 @@ export default class MakeNoticeScreen extends Component {
                         (<FlatList data={this.state.setSelected} horizontal = {true} 
                             renderItem = {renderImage} keyExtractor = {(item,index) => index.toString()} />
         
-                        ) : <Text>사진을 추가하세요!!</Text>
+                        ) : <Text></Text>
                     }
                     <TextInput style={styles.input} 
                     placeholder = "제목" 
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
         borderColor: "#484a49",
         borderRadius: 6,
         width: '100%',
-        height: 50,
+        height: 40,
         marginTop: 8,
         paddingHorizontal: 20,
         fontSize: 25
