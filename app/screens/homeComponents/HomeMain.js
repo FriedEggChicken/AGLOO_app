@@ -38,7 +38,7 @@ export default class HomeMain extends Component {
       my_token : '',
       userID : '',
       data : [],
-      member: '',
+      member: [],
       feed: [],
       feed_: [],
       club_id: ''
@@ -95,17 +95,14 @@ export default class HomeMain extends Component {
       .finally(() => {
         //this.setState({ isLoading : false });
       });
-
       fetch('http://115.85.183.157:3000/isMember/'+'1'+'/'+this.state.userID,{method: 'GET' }) //1로 가라쳐놧는데 바꾸겟습니다
-      .then((response) => response.json())
-      .then((response) => {
-        this.setState({member:response.member})
-        console.log(this.state.member)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
+          .then((response) => response.json())
+          .then((response) => {
+            this.setState({member: response.member})
+          })
+          .catch((error) => {
+            console.log(error)
+          })
       fetch('http://115.85.183.157:3000/feed/'+this.state.userID+'/notice_board',{method: 'GET' })
       .then((response) => response.json())
       .then((response) => {
@@ -180,7 +177,7 @@ export default class HomeMain extends Component {
     else{
       feeds = this.state.feed.map((val,key) => {
         return <View key={key} style={{flex:1,paddingHorizontal: 20,backgroundColor:'#ebf4f6'}}>
-          <TouchableOpacity onPress = {()=>this.props.navigation.navigate("homeboardscreen",{idx:val.idx,user_id:this.state.userID, member: this.state.member})}>
+          <TouchableOpacity onPress = {()=>this.props.navigation.navigate("homeboardscreen",{idx:val.idx,user_id:this.state.userID, member: this.state.member,club_id:val.club_id})}>
   
           <View style={{flexDirection:'row'}}>
         <Text style={{fontWeight:'bold',fontSize:16}}>{val.title}</Text>
@@ -205,7 +202,7 @@ export default class HomeMain extends Component {
     else{
       feedss = this.state.feed_.map((val,key) => {
         return <View key={key} style={{flex:1,paddingHorizontal: 20,backgroundColor:'#ebf4f6'}}>
-          <TouchableOpacity onPress = {()=>this.props.navigation.navigate("homeboardscreen",{idx:val.idx,user_id:this.state.userID, member: this.state.member})}>
+          <TouchableOpacity onPress = {()=>this.props.navigation.navigate("homeboardsscreen",{idx:val.idx,user_id:this.state.userID, member: this.state.member,club_id:val.club_id})}>
   
           <View style={{flexDirection:'row'}}>
         <Text style={{fontWeight:'bold',fontSize:16}}>{val.title}</Text>
@@ -297,8 +294,17 @@ export default class HomeMain extends Component {
                         this.props.navigation.navigate("MyClub", {
                           id : item.club_id, 
                           img:item.img, 
-                          user_id:this.state.userID, 
-                          member: this.state.member
+                          user_id:this.state.userID,
+                          member:  (fetch('http://115.85.183.157:3000/isMember/'+item.club_id+'/'+this.state.userID,{method: 'GET' }) //1로 가라쳐놧는데 바꾸겟습니다
+                          .then((response) => response.json())
+                          .then((response) => {
+                            console.log(response.member)
+                            return response.member
+                          })
+                          .catch((error) => {
+                            console.log(error)
+                          })
+                        )
                         })
                       }
                     >
