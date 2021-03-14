@@ -23,6 +23,7 @@ export default class Write extends Component {
         .then((response) => {
           this.setState({
             dataSource: response, //list 형태
+            setSelected: response.img
           })
         })
         .catch((error) => {

@@ -22,6 +22,7 @@ export default class NoticeFixContentScreen extends Component {
         .then((response) => {
           this.setState({
             dataSource: response, //list 형태
+            setSelected: response.img
           })
         })
         .catch((error) => {
